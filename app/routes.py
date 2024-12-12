@@ -1,48 +1,32 @@
+from fastapi import APIRouter, HTTPException
+from app.models import Review
+from app.services import create_index, insert_review, search_reviews
+import json
 
-@app.get("/")
-async def root():
-    return {"message": "Welcome to the FastAPI-Elasticsearch example!"}
+review_router = APIRouter()
 
+# 인덱스 생성
+@review_router.on_event("startup")
+async def startup_event():
+    create_index()
 
-@app.get("/search/")
-async def search_documents(index: str, query: str):
+# JSON 파일의 데이터를 Elasticsearch에 로드
+@review_router.post("/load")
+async def load_reviews():
     try:
-        response = es.search(
-            index=index,
-            body={
-                "query": {
-                    "match": {
-                        "content": query
-                    }
-                }
-            }
-        )
-        hits = response.get("hits", {}).get("hits", [])
-        return {"results": [hit["_source"] for hit in hits]}
-    except exceptions.NotFoundError:
-        raise HTTPException(status_code=404, detail=f"Index '{index}' not found")
+        with open("app/reviews.json", "r", encoding="utf-8") as f:
+            reviews = json.load(f)
+            for review in reviews:
+                insert_review(review)
+        return {"message": "Reviews loaded into Elasticsearch successfully."}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
-
-# @app.post("/add-document/")
-# async def add_document(index: str, document_id: str, content: dict):
-
-#     try:
-#         es.index(index=index, id=document_id, body=content)
-#         return {"message": "Document added successfully", "index": index, "id": document_id}
-#     except Exception as e:
-#         raise HTTPException(status_code=500, detail=str(e))'
-
-
-@app.delete("/delete-document/")
-async def delete_document(index: str, document_id: str):
-
+# 텍스트 검색
+@review_router.get("/search/")
+async def search_review(query: str):
     try:
-        es.delete(index=index, id=document_id)
-        return {"message": "Document deleted successfully", "index": index, "id": document_id}
-    except exceptions.NotFoundError:
-        raise HTTPException(status_code=404, detail="Document not found")
+        results = search_reviews(query)
+        return {"results": results["hits"]["hits"]}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
