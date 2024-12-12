@@ -1,6 +1,6 @@
 from elasticsearch import Elasticsearch
 
-ELASTICSEARCH_HOST = "http://elasticsearch:9200"
+ELASTICSEARCH_HOST = "http://localhost:9200"
 INDEX_NAME = "reviews"
 
 # Elasticsearch 클라이언트 초기화

@@ -4,7 +4,6 @@ from app.services import create_index, insert_review, search_reviews
 import json
 
 review_router = APIRouter()
-
 # 인덱스 생성
 @review_router.on_event("startup")
 async def startup_event():
