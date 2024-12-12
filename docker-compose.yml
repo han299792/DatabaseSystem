@@ -9,8 +9,11 @@ services:
       - "8000:8000"
     depends_on:
       - elasticsearch
+    environment:
+      - ELASTICSEARCH_HOST=http://elasticsearch:9200
     networks:
       - my_network
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 
   elasticsearch:
     image: elasticsearch:7.17.7
@@ -24,6 +27,16 @@ services:
       - elasticsearch-data:/usr/share/elasticsearch/data
     networks:
       - my_network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+          cpus: "1.0"
 
 volumes:
   elasticsearch-data:

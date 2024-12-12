@@ -1,58 +1,45 @@
+import warnings
 from fastapi import FastAPI, HTTPException
 from elasticsearch import Elasticsearch, exceptions
 
 app = FastAPI()
+es = Elasticsearch("http://localhost:9200")
 
-es = Elasticsearch("http://localhost:9200") 
-
-data_path = "./reviews.json"
-
-es.index(index="my_index", id=1, body=data_path)
-
-@app.get("/")
-async def root():
-    return {"message": "Welcome to the FastAPI-Elasticsearch example!"}
+def delete_index(index_name):
+    if es.indices.exists(index=index_name):  # 인덱스가 존재하는 경우
+        es.indices.delete(index=index_name)
+        print(f"Index '{index_name}' deleted.")
+    else:
+        print(f"Index '{index_name}' does not exist.")
 
 
-@app.get("/search/")
-async def search_documents(index: str, query: str):
-    try:
-        response = es.search(
-            index=index,
-            body={
-                "query": {
-                    "match": {
-                        "content": query
-                    }
-                }
-            }
-        )
-        hits = response.get("hits", {}).get("hits", [])
-        return {"results": [hit["_source"] for hit in hits]}
-    except exceptions.NotFoundError:
-        raise HTTPException(status_code=404, detail=f"Index '{index}' not found")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+def create_index(index_name):
+    mapping = {
+    "mappings": {
+        "properties": {
+            "res_id": { "type": "integer" },
+            "author": { "type": "text" },
+            "review": { "type": "text" }
+        }
+    }
+}
+    es.indices.create(index=index_name, body=mapping)
+    print(f"Index '{index_name}' created with mapping.")
+    
+def insert_data(index_name, document_id, document):
+    response = es.index(index=index_name, id=document_id, body=document)
+    print(f"Document added: {response}")
 
+if __name__ == "__main__":
+    index_name = "my_index"
+    
+    delete_index(index_name)
+    
+    create_index(index_name)
 
-
-# @app.post("/add-document/")
-# async def add_document(index: str, document_id: str, content: dict):
-
-#     try:
-#         es.index(index=index, id=document_id, body=content)
-#         return {"message": "Document added successfully", "index": index, "id": document_id}
-#     except Exception as e:
-#         raise HTTPException(status_code=500, detail=str(e))'
-
-
-@app.delete("/delete-document/")
-async def delete_document(index: str, document_id: str):
-
-    try:
-        es.delete(index=index, id=document_id)
-        return {"message": "Document deleted successfully", "index": index, "id": document_id}
-    except exceptions.NotFoundError:
-        raise HTTPException(status_code=404, detail="Document not found")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    document = {
+        "res_id": 1,
+        "author": "운복15",
+        "review": "이쁘고 맛있어요♥️\n둘이서 런치 코스 이것저것 금액 추가해서 35정도 나왔는데 가격이 비싸다고 느껴지지 않았어요\n서비스도 만족 맛도 만족\n가끔 가서 기분 전환하기 좋은 것 같아요 :)\n직원분들도 너무 친절하세요☺️"
+  },
+    insert_data(index_name, "1", document)
