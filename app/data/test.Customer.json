@@ -1,0 +1,104 @@
+[
+  {
+    "_id": {
+      "$oid": "6755b68f1c20f6e6f527df95"
+    },
+    "cus_id": "CUS0000001",
+    "cus_name": "Alice",
+    "address": {
+      "si": "Gwangju",
+      "gu": "Gwangsan",
+      "dong": "WeolGae",
+      "detail": "14-1-101",
+      "distance": {
+        "type": "Point",
+        "coordinates": [126.8351559, 35.2133604]
+      }
+    }
+  },
+  {
+    "_id": {
+      "$oid": "6755b68f1c20f6e6f527df96"
+    },
+    "cus_id": "CUS0000002",
+    "cus_name": "Bob",
+    "address": {
+      "si": "Gwangju",
+      "gu": "Gwangsan",
+      "dong": "SangAm",
+      "detail": "3-203-103",
+      "distance": {
+        "type": "Point",
+        "coordinates": [126.8479653, 35.2247805]
+      }
+    }
+  },
+  {
+    "_id": {
+      "$oid": "6755b68f1c20f6e6f527df97"
+    },
+    "cus_id": "CUS0000003",
+    "cus_name": "Charlie",
+    "address": {
+      "si": "Gwangju",
+      "gu": "Gwangsan",
+      "dong": "Gunguk",
+      "detail": "10-101-101",
+      "distance": {
+        "type": "Point",
+        "coordinates": [126.8837306, 35.233611]
+      }
+    }
+  },
+  {
+    "_id": {
+      "$oid": "6755b68f1c20f6e6f527df98"
+    },
+    "cus_id": "CUS0000004",
+    "cus_name": "David",
+    "address": {
+      "si": "Daejeon",
+      "gu": "Seo",
+      "dong": "DunSan",
+      "detail": "7-203-1101",
+      "distance": {
+        "type": "Point",
+        "coordinates": [127.3858162, 36.3525471]
+      }
+    }
+  },
+  {
+    "_id": {
+      "$oid": "6755b68f1c20f6e6f527df99"
+    },
+    "cus_id": "CUS0000005",
+    "cus_name": "Eve",
+    "address": {
+      "si": "Daejeon",
+      "gu": "Seo",
+      "dong": "DunSan",
+      "detail": "301-301",
+      "distance": {
+        "type": "Point",
+        "coordinates": [127.3797854, 36.3524144]
+      }
+    }
+  },
+  {
+    "_id": {
+      "$oid": "6755b68f1c20f6e6f527df9a"
+    },
+    "cus_id": "CUS0000006",
+    "cus_name": "Frank",
+    "address": {
+      "si": "Daejeon",
+      "gu": "Seo",
+      "dong": "ManNyeon",
+      "detail": "1001-101",
+      "distance": {
+        "type": "Point",
+        "coordinates": [127.3750235, 36.3675085]
+      }
+    }
+  }
+]

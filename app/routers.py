@@ -3,6 +3,7 @@ from app.models import Review
 from app.services import create_index, insert_review, search_reviews
 import json
 from app.db import customerData, resData
+from bson import ObjectId
 
 review_router = APIRouter()
 # 인덱스 생성
@@ -31,6 +32,42 @@ async def search_review(query: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
+
+@review_router.post("/load/restaurants/")
+async def load_restaurants():
+    try:
+        with open("app/data/test.Restaurant.json", "r", encoding="utf-8") as file:
+            data = json.load(file)
+            for item in data:
+                # `_id` 필드가 `$oid` 형식일 경우 ObjectId로 변환
+                if "_id" in item and "$oid" in item["_id"]:
+                    item["_id"] = ObjectId(item["_id"]["$oid"])
+                
+                # 중복 확인 및 데이터 삽입
+                existing = await resData.find_one({"_id": item["_id"]})
+                if not existing:
+                    await resData.insert_one(item)
+        return {"message": "Restaurant data loaded successfully."}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@review_router.post("/load/customers/")
+async def load_customers():
+    try:
+        with open("app/data/test.Customer.json", "r", encoding="utf-8") as file:
+            data = json.load(file)
+            for item in data:
+                # `_id` 필드가 `$oid` 형식일 경우 ObjectId로 변환
+                if "_id" in item and "$oid" in item["_id"]:
+                    item["_id"] = ObjectId(item["_id"]["$oid"])
+                
+                # 중복 확인 및 데이터 삽입
+                existing = await customerData.find_one({"_id": item["_id"]})
+                if not existing:
+                    await customerData.insert_one(item)
+        return {"message": "Customer data loaded successfully."}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 @review_router.get("/find_nearby_restaurants")
 async def find_nearby_restaurants():
     try:

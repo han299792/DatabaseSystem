@@ -1,0 +1,207 @@
+[{
+  "_id": {
+    "$oid": "6755ab011c20f6e6f527df0c"
+  },
+  "res_id": "RES0000001",
+  "name": "OwlCottage",
+  "address": {
+    "si": "Gwangju",
+    "gu": "Gwangsan",
+    "dong": "WeolGae",
+    "detail": "881-1",
+    "distance": {
+      "type": "Point",
+      "coordinates": [
+        126.828108,
+        35.208165
+      ]
+    }
+  },
+  "phone": "821074927694"
+},
+{
+  "_id": {
+    "$oid": "6755ab011c20f6e6f527df0d"
+  },
+  "res_id": "RES0000002",
+  "name": "ZhangJiaJie",
+  "address": {
+    "si": "Gwangju",
+    "gu": "Gwangsan",
+    "dong": "SangAm",
+    "detail": "655-5",
+    "distance": {
+      "type": "Point",
+      "coordinates": [
+        126.8423865,
+        35.2203122
+      ]
+    }
+  },
+  "phone": "821083129384"
+},
+{
+  "_id": {
+    "$oid": "6755ab011c20f6e6f527df0e"
+  },
+  "res_id": "RES0000003",
+  "name": "YeonWha",
+  "address": {
+    "si": "Gwangju",
+    "gu": "Gwangsan-Gu",
+    "dong": "SangAm",
+    "detail": "662-2",
+    "distance": {
+      "type": "Point",
+      "coordinates": [
+        126.843046,
+        35.2204518
+      ]
+    }
+  },
+  "phone": "821003759174"
+},
+{
+  "_id": {
+    "$oid": "6755ab011c20f6e6f527df0f"
+  },
+  "res_id": "RES0000004",
+  "name": "Mayo",
+  "address": {
+    "si": "Gwangju",
+    "gu": "Gwangsan-Gu",
+    "dong": "WeolGae",
+    "detail": "882-1",
+    "distance": {
+      "type": "Point",
+      "coordinates": [
+        126.8484396,
+        35.2154251
+      ]
+    }
+  },
+  "phone": "821048632348"
+},
+{
+  "_id": {
+    "$oid": "6755ab011c20f6e6f527df10"
+  },
+  "res_id": "RES0000005",
+  "name": "HyeonOk",
+  "address": {
+    "si": "Gwangju",
+    "gu": "Buk-gu",
+    "dong": "SangAm",
+    "detail": "654-7",
+    "distance": [
+      126.8437206,
+      35.2213705
+    ]
+  },
+  "phone": "82104207452"
+},
+{
+  "_id": {
+    "$oid": "6755ab011c20f6e6f527df11"
+  },
+  "res_id": "RES0000006",
+  "name": "NoeunKalGukSu",
+  "address": {
+    "si": "Daejeon",
+    "gu": "YuSeong",
+    "dong": "Jijok",
+    "detail": "910-23",
+    "distance": {
+      "type": "Point",
+      "coordinates": [
+        127.3198445,
+        36.3757293
+      ]
+    }
+  },
+  "phone": "821093856103"
+},
+{
+  "_id": {
+    "$oid": "6755ab011c20f6e6f527df12"
+  },
+  "res_id": "RES0000007",
+  "name": "Solemio",
+  "address": {
+    "si": "Daejeon",
+    "gu": "Seo",
+    "dong": "GweJeong",
+    "detail": "423-4",
+    "distance": {
+      "type": "Point",
+      "coordinates": [
+        127.3907742,
+        36.3398333
+      ]
+    }
+  },
+  "phone": "821098874529"
+},
+{
+  "_id": {
+    "$oid": "6755ab011c20f6e6f527df13"
+  },
+  "res_id": "RES0000008",
+  "name": "SungShimDang",
+  "address": {
+    "si": "Daejeon",
+    "gu": "Jung",
+    "dong": "EunHang",
+    "detail": "145",
+    "distance": {
+      "type": "Point",
+      "coordinates": [
+        127.4272652,
+        36.3277614
+      ]
+    }
+  },
+  "phone": "821034904857"
+},
+{
+  "_id": {
+    "$oid": "6755ab011c20f6e6f527df14"
+  },
+  "res_id": "RES0000009",
+  "name": "HareHare",
+  "address": {
+    "si": "Daejeon",
+    "gu": "Seo",
+    "dong": "DunSan",
+    "detail": "1509",
+    "distance": {
+      "type": "Point",
+      "coordinates": [
+        127.3927412,
+        36.3524244
+      ]
+    }
+  },
+  "phone": "821087633579"
+},
+{
+  "_id": {
+    "$oid": "6755ab011c20f6e6f527df15"
+  },
+  "res_id": "RES0000010",
+  "name": "Bespoke",
+  "address": {
+    "si": "Daejeon",
+    "gu": "Seo",
+    "dong": "ManNyeon",
+    "detail": "295",
+    "distance": {
+      "type": "Point",
+      "coordinates": [
+        127.3800025,
+        36.3684144
+      ]
+    }
+  },
+  "phone": "821034906542"
+}]
