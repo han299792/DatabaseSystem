@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  fastapi:
+    build:
+      context: ./app
+    container_name: fastapi
+    ports:
+      - "8000:8000"
+    depends_on:
+      - elasticsearch
+    networks:
+      - my_network
+
+  elasticsearch:
+    image: elasticsearch:7.17.7
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    networks:
+      - my_network
+
+volumes:
+  elasticsearch-data:
+
+networks:
+  my_network:

@@ -26,3 +26,5 @@ build/
 *.out
 *.class
 *.o
+
+elasticsearch-8.16.1
