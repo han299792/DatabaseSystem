@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 from app.models import Review
 from app.services import create_index, insert_review, search_reviews
 import json
+from app.db import customerData, resData
 
 review_router = APIRouter()
 # 인덱스 생성
@@ -29,3 +30,45 @@ async def search_review(query: str):
         return {"results": results["hits"]["hits"]}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+@review_router.get("/find_nearby_restaurants")
+async def find_nearby_restaurants():
+    try:
+        customer_name = []
+        customer_address = []
+
+        async for doc in customerData.find():
+            if 'address' in doc and 'distance' in doc['address']:
+                customer_name.append(doc['cus_name'])
+                customer_address.append(doc['address']['distance']['coordinates'])
+
+        result = []
+
+        for i, customer in enumerate(customer_address):
+            customer_lon, customer_lat = customer
+
+            cursor = resData.aggregate([
+                {
+                    "$geoNear": {
+                        "near": {
+                            "type": "Point",
+                            "coordinates": [customer_lon, customer_lat]
+                        },
+                        "distanceField": "distance",
+                        "maxDistance": 5000,  # 5km
+                        "spherical": True
+                    }
+                }
+            ])
+
+            async for doc in cursor:
+                result.append({
+                    "Customer": customer_name[i],
+                    "Restaurant": doc['name'],
+                    "Distance": f"{doc['distance']:.2f} meters"
+                })
+
+        return {"data": result}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
