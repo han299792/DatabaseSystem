@@ -4,30 +4,96 @@ from app.services import create_index, insert_review, search_reviews
 import json
 from app.db import customerData, resData
 from bson import ObjectId
+import sqlite3
+import json
+from elasticsearch import Elasticsearch
 
+# Elasticsearch 설정
+es = Elasticsearch(hosts=["http://localhost:9200"])
+
+# FastAPI Router
 review_router = APIRouter()
+
+# SQLite DB 파일 경로
+DB_PATH = "hw4.db"
+
+# Elasticsearch Index 이름
+INDEX_NAME = "reviews"
+
+# Elasticsearch 인덱스 생성 함수
+def create_index():
+    if not es.indices.exists(index=INDEX_NAME):
+        es.indices.create(
+            index=INDEX_NAME,
+            body={
+                "mappings": {
+                    "properties": {
+                        "review_id": {"type": "keyword"},
+                        "rec_id": {"type": "keyword"},
+                        "author": {"type": "text"},
+                        "content": {"type": "text"}
+                    }
+                }
+            }
+        )
+        print(f"Index '{INDEX_NAME}' created.")
+
 @review_router.on_event("startup")
 async def startup_event():
+    # Elasticsearch 인덱스 생성
     create_index()
+
 @review_router.post("/load")
-async def load_reviews():
+async def load_reviews_from_db():
+    """
+    SQLite DB에서 데이터를 읽어와 JSON 형식으로 변환 후 Elasticsearch에 저장.
+    """
     try:
-        with open("app/reviews.json", "r", encoding="utf-8") as f:
-            reviews = json.load(f)
-            for review in reviews:
-                insert_review(review)
+        # SQLite DB 연결
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+
+        # Review 테이블의 데이터 읽기
+        cursor.execute("SELECT review_id, rec_id, author, content FROM Review")
+        rows = cursor.fetchall()
+
+        # 데이터를 Elasticsearch에 삽입
+        for row in rows:
+            review = {
+                "review_id": row[0],
+                "rec_id": row[1],
+                "author": row[2],
+                "content": row[3]
+            }
+            es.index(index=INDEX_NAME, id=review["review_id"], body=review)
+
+        conn.close()
         return {"message": "Reviews loaded into Elasticsearch successfully."}
+
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=f"Error loading reviews: {str(e)}")
 
 @review_router.get("/search/")
 async def search_review(query: str):
+    """
+    특정 쿼리와 일치하는 텍스트가 포함된 리뷰 데이터를 반환.
+    """
     try:
-        results = search_reviews(query)
-        return {"results": results["hits"]["hits"]}
+        # Elasticsearch 검색 쿼리
+        results = es.search(
+            index=INDEX_NAME,
+            body={
+                "query": {
+                    "match": {
+                        "content": query
+                    }
+                }
+            }
+        )
+        return {"results": [hit["_source"] for hit in results["hits"]["hits"]]}
+
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-    
+        raise HTTPException(status_code=500, detail=f"Error searching reviews: {str(e)}")
 
 @review_router.post("/load/restaurants/")
 async def load_restaurants():
